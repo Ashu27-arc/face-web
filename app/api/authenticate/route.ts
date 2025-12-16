@@ -1,9 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import fs from "fs";
-import path from "path";
-
-const DATA_DIR = path.join(process.cwd(), "data");
-const USERS_FILE = path.join(DATA_DIR, "users.json");
+import connectDB from "@/lib/mongodb";
+import User from "@/models/User";
 
 // Helper function to calculate Euclidean distance
 function euclideanDistance(arr1: number[], arr2: number[]): number {
@@ -24,17 +21,11 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Check if users file exists
-    if (!fs.existsSync(USERS_FILE)) {
-      return NextResponse.json(
-        { error: "No registered users found" },
-        { status: 404 }
-      );
-    }
+    // Connect to database
+    await connectDB();
 
-    // Read users
-    const usersData = fs.readFileSync(USERS_FILE, "utf-8");
-    const users = JSON.parse(usersData);
+    // Get all active users
+    const users = await User.find({ isActive: true });
 
     if (users.length === 0) {
       return NextResponse.json(
@@ -59,11 +50,17 @@ export async function POST(request: NextRequest) {
     }
 
     if (bestMatch && bestDistance < THRESHOLD) {
+      // Update login stats
+      await User.findByIdAndUpdate(bestMatch._id, {
+        lastLogin: new Date(),
+        $inc: { loginCount: 1 },
+      });
+
       return NextResponse.json({
         success: true,
         message: "Authentication successful",
         user: {
-          id: bestMatch.id,
+          id: bestMatch._id,
           name: bestMatch.userData.name,
           email: bestMatch.userData.email,
         },

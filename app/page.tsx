@@ -48,7 +48,7 @@ export default function Home() {
             </h2>
           </div>
           <p className="text-xl md:text-2xl text-slate-300 max-w-3xl mx-auto leading-relaxed">
-            Empowering businesses with cutting-edge technology, AI-powered security, and innovative digital solutions
+            Transform your business with custom software development, AI solutions, cloud infrastructure, and enterprise applications
           </p>
           <div className="flex gap-4 justify-center flex-wrap pt-4">
             <Link 

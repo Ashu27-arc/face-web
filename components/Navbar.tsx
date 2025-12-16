@@ -53,7 +53,7 @@ export default function Navbar() {
     }`}>
       <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
         <Link href="/" className="text-2xl font-bold gradient-text hover:scale-105 transition-transform">
-          TechVision
+          TechVision IT
         </Link>
         
         <div className="hidden md:flex gap-8">

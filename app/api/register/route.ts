@@ -1,20 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import fs from "fs";
-import path from "path";
-
-// Data storage path
-const DATA_DIR = path.join(process.cwd(), "data");
-const USERS_FILE = path.join(DATA_DIR, "users.json");
-
-// Ensure data directory exists
-if (!fs.existsSync(DATA_DIR)) {
-  fs.mkdirSync(DATA_DIR, { recursive: true });
-}
-
-// Initialize users file if it doesn't exist
-if (!fs.existsSync(USERS_FILE)) {
-  fs.writeFileSync(USERS_FILE, JSON.stringify([]));
-}
+import connectDB from "@/lib/mongodb";
+import User from "@/models/User";
 
 export async function POST(request: NextRequest) {
   try {
@@ -29,14 +15,11 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Read existing users
-    const usersData = fs.readFileSync(USERS_FILE, "utf-8");
-    const users = JSON.parse(usersData);
+    // Connect to database
+    await connectDB();
 
     // Check if user already exists
-    const existingUser = users.find(
-      (user: any) => user.userData.email === userData.email
-    );
+    const existingUser = await User.findOne({ "userData.email": userData.email });
 
     if (existingUser) {
       return NextResponse.json(
@@ -45,30 +28,17 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Create new user
-    const newUser = {
-      id: Date.now().toString(),
+    // Create new user in MongoDB
+    const newUser = await User.create({
       userData,
       faceDescriptors,
-      registeredAt: new Date().toISOString(),
-      capturedImages: capturedImages.map((img: string, idx: number) => {
-        // Save images to disk
-        const imageName = `${userData.email.replace(/[^a-zA-Z0-9]/g, "_")}_${idx}.jpg`;
-        const imagePath = path.join(DATA_DIR, imageName);
-        const base64Data = img.replace(/^data:image\/\w+;base64,/, "");
-        fs.writeFileSync(imagePath, base64Data, "base64");
-        return imageName;
-      }),
-    };
-
-    // Add user to database
-    users.push(newUser);
-    fs.writeFileSync(USERS_FILE, JSON.stringify(users, null, 2));
+      capturedImages,
+    });
 
     return NextResponse.json({
       success: true,
       message: "User registered successfully",
-      userId: newUser.id,
+      userId: newUser._id,
     });
   } catch (error) {
     console.error("Registration error:", error);

@@ -1,36 +1,34 @@
-import { NextRequest, NextResponse } from "next/server";
-import fs from "fs";
-import path from "path";
+import { NextResponse } from "next/server";
+import connectDB from "@/lib/mongodb";
+import User from "@/models/User";
 
-const DATA_DIR = path.join(process.cwd(), "data");
-const USERS_FILE = path.join(DATA_DIR, "users.json");
-
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
-    // Check if users file exists
-    if (!fs.existsSync(USERS_FILE)) {
-      return NextResponse.json({ users: [] });
-    }
+    // Connect to database
+    await connectDB();
 
-    // Read users
-    const usersData = fs.readFileSync(USERS_FILE, "utf-8");
-    const users = JSON.parse(usersData);
+    // Get all users
+    const users = await User.find()
+      .select("-faceDescriptors -capturedImages")
+      .sort({ registeredAt: -1 });
 
-    // Return users without face descriptors (for privacy)
+    // Return sanitized user data
     const sanitizedUsers = users.map((user: any) => ({
-      id: user.id,
+      id: user._id,
       name: user.userData.name,
       email: user.userData.email,
       phone: user.userData.phone,
-      company: user.userData.company,
       registeredAt: user.registeredAt,
+      lastLogin: user.lastLogin,
+      loginCount: user.loginCount,
+      isActive: user.isActive,
     }));
 
     return NextResponse.json({ users: sanitizedUsers });
   } catch (error) {
     console.error("Error fetching users:", error);
     return NextResponse.json(
-      { error: "Internal server error" },
+      { error: "Failed to fetch users" },
       { status: 500 }
     );
   }

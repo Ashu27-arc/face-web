@@ -1,46 +1,67 @@
 export default function ServicesPage() {
   const services = [
     {
-      title: "Face Authentication",
-      description: "Secure login using advanced facial recognition technology with 99.9% accuracy",
-      icon: "🔐",
-      features: ["Multi-factor authentication", "Real-time verification", "Anti-spoofing detection"],
+      title: "Custom Software Development",
+      description: "Tailored software solutions built from scratch to meet your unique business requirements",
+      icon: "💻",
+      features: ["Web Applications", "Mobile Apps", "Desktop Software"],
       color: "blue"
     },
     {
-      title: "Identity Verification",
-      description: "Real-time identity verification for enhanced security and compliance",
-      icon: "✓",
-      features: ["KYC compliance", "Document verification", "Liveness detection"],
+      title: "AI & Machine Learning",
+      description: "Intelligent solutions powered by artificial intelligence and machine learning algorithms",
+      icon: "🤖",
+      features: ["Facial Recognition", "Predictive Analytics", "Natural Language Processing"],
       color: "purple"
     },
     {
-      title: "Access Control",
-      description: "Biometric access control for physical and digital spaces",
-      icon: "🚪",
-      features: ["Touchless entry", "Audit trails", "Integration ready"],
-      color: "pink"
-    },
-    {
-      title: "Security Analytics",
-      description: "Advanced analytics and monitoring for security insights",
-      icon: "📊",
-      features: ["Real-time dashboards", "Threat detection", "Custom reports"],
-      color: "green"
-    },
-    {
-      title: "Cloud Solutions",
-      description: "Scalable cloud infrastructure for enterprise deployments",
+      title: "Cloud Infrastructure",
+      description: "Scalable and secure cloud solutions for modern businesses",
       icon: "☁️",
-      features: ["Auto-scaling", "99.99% uptime", "Global CDN"],
+      features: ["AWS/Azure/GCP", "DevOps & CI/CD", "Microservices Architecture"],
       color: "cyan"
     },
     {
-      title: "Custom Integration",
-      description: "Seamless integration with your existing systems and workflows",
-      icon: "🔗",
-      features: ["REST APIs", "SDKs available", "24/7 support"],
+      title: "Enterprise Solutions",
+      description: "Comprehensive enterprise software for large-scale operations",
+      icon: "🏢",
+      features: ["ERP Systems", "CRM Solutions", "Business Intelligence"],
+      color: "green"
+    },
+    {
+      title: "Mobile Development",
+      description: "Native and cross-platform mobile applications for iOS and Android",
+      icon: "📱",
+      features: ["React Native", "Flutter", "Native iOS/Android"],
+      color: "pink"
+    },
+    {
+      title: "Web Development",
+      description: "Modern, responsive websites and web applications",
+      icon: "🌐",
+      features: ["React/Next.js", "E-commerce", "Progressive Web Apps"],
       color: "orange"
+    },
+    {
+      title: "Cybersecurity",
+      description: "Protect your digital assets with enterprise-grade security solutions",
+      icon: "🔐",
+      features: ["Penetration Testing", "Security Audits", "Compliance Management"],
+      color: "blue"
+    },
+    {
+      title: "Data Analytics",
+      description: "Transform data into actionable insights with advanced analytics",
+      icon: "📊",
+      features: ["Big Data Processing", "Real-time Analytics", "Data Visualization"],
+      color: "purple"
+    },
+    {
+      title: "IT Consulting",
+      description: "Strategic technology consulting to drive digital transformation",
+      icon: "💡",
+      features: ["Technology Strategy", "Digital Transformation", "Architecture Design"],
+      color: "green"
     }
   ];
 

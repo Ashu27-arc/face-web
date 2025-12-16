@@ -1,52 +1,68 @@
 export default function ProjectsPage() {
   const projects = [
     {
-      title: "Enterprise Security System",
-      description: "Implemented comprehensive facial recognition system for a Fortune 500 company, processing over 10,000 daily authentications with 99.9% accuracy",
+      title: "E-Commerce Platform",
+      description: "Built a scalable e-commerce platform handling 100K+ daily transactions with real-time inventory management and AI-powered recommendations",
       status: "Completed",
       year: "2024",
-      tech: ["AI/ML", "Cloud", "Real-time Processing"],
-      impact: "50% reduction in security incidents"
+      tech: ["Next.js", "Node.js", "PostgreSQL", "Redis"],
+      impact: "300% revenue increase"
     },
     {
-      title: "Smart Building Access",
-      description: "Biometric access control system for modern office buildings with touchless entry and real-time monitoring",
+      title: "Healthcare Management System",
+      description: "Comprehensive hospital management system with patient records, appointment scheduling, and telemedicine capabilities",
+      status: "Completed",
+      year: "2024",
+      tech: ["React", "Python", "MongoDB", "WebRTC"],
+      impact: "Serving 50+ hospitals"
+    },
+    {
+      title: "AI-Powered Face Recognition",
+      description: "Enterprise security system with facial recognition, real-time authentication, and advanced biometric features",
       status: "In Progress",
       year: "2024",
-      tech: ["IoT", "Biometrics", "Mobile App"],
-      impact: "Serving 5,000+ employees"
+      tech: ["TensorFlow", "Next.js", "AWS", "Computer Vision"],
+      impact: "99.9% accuracy rate"
     },
     {
-      title: "Mobile Authentication App",
-      description: "Cross-platform mobile application with advanced face authentication and multi-factor security",
+      title: "Financial Analytics Dashboard",
+      description: "Real-time financial analytics platform with predictive modeling and automated reporting for investment firms",
       status: "Completed",
       year: "2023",
-      tech: ["React Native", "TensorFlow", "AWS"],
-      impact: "1M+ downloads"
+      tech: ["React", "Python", "Apache Kafka", "ML"],
+      impact: "$10M+ managed assets"
     },
     {
-      title: "Banking Security Platform",
-      description: "Secure authentication platform for digital banking with fraud detection and compliance features",
+      title: "Mobile Banking App",
+      description: "Secure mobile banking application with biometric authentication, instant transfers, and investment features",
       status: "Completed",
       year: "2023",
-      tech: ["Blockchain", "AI", "Encryption"],
-      impact: "Zero security breaches"
+      tech: ["React Native", "Node.js", "Blockchain"],
+      impact: "500K+ active users"
     },
     {
-      title: "Healthcare Identity System",
-      description: "HIPAA-compliant identity verification system for healthcare providers and patients",
-      status: "Completed",
-      year: "2023",
-      tech: ["Privacy-first AI", "Secure Cloud", "APIs"],
-      impact: "100K+ patients verified"
-    },
-    {
-      title: "Retail Analytics Dashboard",
-      description: "AI-powered analytics platform for retail customer insights and behavior tracking",
+      title: "Supply Chain Management",
+      description: "End-to-end supply chain solution with IoT integration, real-time tracking, and predictive analytics",
       status: "In Progress",
       year: "2024",
-      tech: ["Computer Vision", "Analytics", "Dashboard"],
-      impact: "30% increase in conversions"
+      tech: ["IoT", "Cloud", "AI", "Blockchain"],
+      impact: "40% efficiency gain"
+    },
+    {
+      title: "Educational Learning Platform",
+      description: "Interactive online learning platform with live classes, AI tutoring, and progress tracking",
+      status: "Completed",
+      year: "2023",
+      tech: ["Next.js", "WebRTC", "AI", "Cloud"],
+      impact: "100K+ students enrolled"
+    },
+    {
+      title: "Restaurant Management System",
+      description: "Complete restaurant POS system with inventory, staff management, and customer loyalty programs",
+      status: "Completed",
+      year: "2023",
+      tech: ["React", "Node.js", "PostgreSQL"],
+      impact: "200+ restaurants using"
     }
   ];
 
