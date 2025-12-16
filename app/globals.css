@@ -7,13 +7,6 @@
     --accent-hover: #2563eb;
 }
 
-@theme inline {
-    --color-background: var(--background);
-    --color-foreground: var(--foreground);
-    --font-sans: var(--font-geist-sans);
-    --font-mono: var(--font-geist-mono);
-}
-
 body {
     background: #0a0e1a;
     color: var(--foreground);
