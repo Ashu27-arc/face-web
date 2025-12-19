@@ -53,7 +53,7 @@ export default function Home() {
           <div className="flex gap-4 justify-center flex-wrap pt-4">
             <Link 
               href="/services" 
-              className="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 px-10 py-4 rounded-xl font-semibold text-lg shadow-lg shadow-blue-500/40 hover:scale-105 hover:shadow-blue-500/60 glow"
+              className="bg-linear-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 px-10 py-4 rounded-xl font-semibold text-lg shadow-lg shadow-blue-500/40 hover:scale-105 hover:shadow-blue-500/60 glow"
             >
               Explore Services
             </Link>
@@ -99,7 +99,7 @@ export default function Home() {
       {/* Stats Section */}
       <section className="py-24">
         <div className="glass p-16 rounded-3xl relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-r from-blue-600/5 to-purple-600/5"></div>
+          <div className="absolute inset-0 bg-linear-to-r from-blue-600/5 to-purple-600/5"></div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-12 text-center relative z-10">
             <div className="space-y-2">
               <div className="text-6xl font-bold gradient-text mb-3">500+</div>
@@ -125,7 +125,7 @@ export default function Home() {
       {!isAuthenticated && (
         <section className="py-24 text-center">
           <div className="glass p-16 rounded-3xl max-w-4xl mx-auto relative overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-br from-blue-600/10 via-purple-600/10 to-pink-600/10"></div>
+            <div className="absolute inset-0 bg-linear-to-br from-blue-600/10 via-purple-600/10 to-pink-600/10"></div>
             <div className="relative z-10 space-y-6">
               <h2 className="text-5xl font-bold mb-4 gradient-text">Experience Secure Authentication</h2>
               <p className="text-xl text-slate-300 mb-8 max-w-2xl mx-auto leading-relaxed">
@@ -133,7 +133,7 @@ export default function Home() {
               </p>
               <Link 
                 href="/auth" 
-                className="inline-block bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 hover:from-blue-700 hover:via-purple-700 hover:to-pink-700 px-12 py-5 rounded-xl font-semibold text-lg shadow-2xl hover:scale-105 glow"
+                className="inline-block bg-linear-to-r from-blue-600 via-purple-600 to-pink-600 hover:from-blue-700 hover:via-purple-700 hover:to-pink-700 px-12 py-5 rounded-xl font-semibold text-lg shadow-2xl hover:scale-105 glow"
               >
                 Try Face Authentication →
               </Link>
