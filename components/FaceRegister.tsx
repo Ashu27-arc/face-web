@@ -167,7 +167,7 @@ export default function FaceRegister({ userData }: FaceRegisterProps) {
             disabled={!loaded || capturing}
             className={`px-8 py-4 rounded-lg font-semibold text-lg shadow-lg ${
               loaded && !capturing
-                ? "bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white cursor-pointer hover:scale-105" 
+                ? "bg-linear-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white cursor-pointer hover:scale-105" 
                 : "bg-slate-700 text-slate-400 cursor-not-allowed"
             }`}
           >
