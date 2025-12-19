@@ -18,7 +18,7 @@ export default function RootLayout({
         <Navbar />
         <main className="pt-20 min-h-screen">{children}</main>
         <footer className="glass mt-20 py-12 relative overflow-hidden">
-          <div className="absolute inset-0 bg-gradient-to-t from-blue-600/5 to-transparent"></div>
+          <div className="absolute inset-0 bg-linear-to-t from-blue-600/5 to-transparent"></div>
           <div className="max-w-7xl mx-auto px-6 text-center relative z-10">
             <div className="mb-4">
               <span className="text-3xl font-bold gradient-text">TechVision</span>
