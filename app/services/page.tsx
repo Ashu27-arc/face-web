@@ -87,7 +87,7 @@ export default function ServicesPage() {
         {services.map((service, index) => (
           <div 
             key={index} 
-            className={`bg-gradient-to-br ${colorMap[service.color]} border rounded-2xl p-8 hover:scale-105 hover:shadow-2xl backdrop-blur-sm`}
+            className={`bg-linear-to-br ${colorMap[service.color]} border rounded-2xl p-8 hover:scale-105 hover:shadow-2xl backdrop-blur-sm`}
           >
             <div className="text-5xl mb-4">{service.icon}</div>
             <h2 className="text-2xl font-bold mb-3">{service.title}</h2>

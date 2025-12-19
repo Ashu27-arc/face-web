@@ -116,7 +116,7 @@ export default function ProjectsPage() {
         </p>
         <a 
           href="/contact" 
-          className="inline-block bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 px-8 py-4 rounded-lg font-semibold shadow-lg"
+          className="inline-block bg-linear-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 px-8 py-4 rounded-lg font-semibold shadow-lg"
         >
           Let's Talk
         </a>
