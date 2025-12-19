@@ -78,7 +78,7 @@ export default function AdminPage() {
                   <tr key={user.id} className="border-b border-slate-800 hover:bg-slate-800/30">
                     <td className="py-4 px-4">
                       <div className="flex items-center gap-2">
-                        <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full flex items-center justify-center">
+                        <div className="w-8 h-8 bg-linear-to-r from-blue-600 to-purple-600 rounded-full flex items-center justify-center">
                           <span className="text-white font-bold text-sm">
                             {user.name.charAt(0).toUpperCase()}
                           </span>

@@ -133,7 +133,7 @@ export default function RegisterPage() {
               </button>
               <button
                 type="submit"
-                className="flex-1 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white py-3 rounded-lg font-semibold shadow-lg"
+                className="flex-1 bg-linear-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white py-3 rounded-lg font-semibold shadow-lg"
               >
                 Continue to Face Registration
               </button>

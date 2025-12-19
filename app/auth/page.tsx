@@ -19,7 +19,7 @@ export default function AuthPage() {
           <p className="text-slate-300 mb-4">Don't have an account?</p>
           <Link 
             href="/register"
-            className="inline-block bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 px-8 py-3 rounded-lg font-semibold shadow-lg hover:scale-105"
+            className="inline-block bg-linear-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 px-8 py-3 rounded-lg font-semibold shadow-lg hover:scale-105"
           >
             Create New Account
           </Link>
