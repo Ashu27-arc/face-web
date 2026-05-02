@@ -1,22 +1,27 @@
 "use client";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 export default function Home() {
-  const router = useRouter();
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
 
   const [userName, setUserName] = useState("");
 
   useEffect(() => {
-    const auth = localStorage.getItem("faceAuth");
-    const name = localStorage.getItem("userName");
-    setIsAuthenticated(!!auth);
-    setUserName(name || "User");
-    setLoading(false);
-  }, [router]);
+    try {
+      const auth = localStorage.getItem("faceAuth");
+      const name = localStorage.getItem("userName");
+      setIsAuthenticated(!!auth);
+      setUserName(name || "User");
+    } catch (error) {
+      console.error("Unable to read auth state from localStorage:", error);
+      setIsAuthenticated(false);
+      setUserName("User");
+    } finally {
+      setLoading(false);
+    }
+  }, []);
 
   if (loading) {
     return (
