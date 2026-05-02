@@ -2,9 +2,20 @@ import { NextRequest, NextResponse } from "next/server";
 import connectDB from "@/lib/mongodb";
 import User from "@/models/User";
 
+type RegisterBody = {
+  userData?: {
+    name?: string;
+    email?: string;
+    phone?: string;
+    company?: string;
+  };
+  faceDescriptors?: number[][];
+  capturedImages?: string[];
+};
+
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
+    const body: RegisterBody = await request.json();
     const { userData, faceDescriptors, capturedImages } = body;
 
     // Validate required fields
@@ -15,11 +26,33 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    const normalizedEmail = userData.email?.trim().toLowerCase();
+    if (!userData.name?.trim() || !normalizedEmail) {
+      return NextResponse.json(
+        { error: "Name and email are required" },
+        { status: 400 }
+      );
+    }
+
+    if (!Array.isArray(faceDescriptors) || faceDescriptors.length === 0) {
+      return NextResponse.json(
+        { error: "At least one face descriptor is required" },
+        { status: 400 }
+      );
+    }
+
+    if (!Array.isArray(capturedImages) || capturedImages.length === 0) {
+      return NextResponse.json(
+        { error: "At least one captured image is required" },
+        { status: 400 }
+      );
+    }
+
     // Connect to database
     await connectDB();
 
     // Check if user already exists
-    const existingUser = await User.findOne({ "userData.email": userData.email });
+    const existingUser = await User.findOne({ "userData.email": normalizedEmail });
 
     if (existingUser) {
       return NextResponse.json(
@@ -30,7 +63,11 @@ export async function POST(request: NextRequest) {
 
     // Create new user in MongoDB
     const newUser = await User.create({
-      userData,
+      userData: {
+        ...userData,
+        email: normalizedEmail,
+        name: userData.name.trim(),
+      },
       faceDescriptors,
       capturedImages,
     });
@@ -42,6 +79,33 @@ export async function POST(request: NextRequest) {
     });
   } catch (error) {
     console.error("Registration error:", error);
+
+    // Handle duplicate key conflicts returned by MongoDB.
+    if (
+      typeof error === "object" &&
+      error !== null &&
+      "code" in error &&
+      (error as { code?: number }).code === 11000
+    ) {
+      return NextResponse.json(
+        { error: "User with this email already exists" },
+        { status: 409 }
+      );
+    }
+
+    // Surface validation failures as 400 instead of generic 500.
+    if (
+      typeof error === "object" &&
+      error !== null &&
+      "name" in error &&
+      (error as { name?: string }).name === "ValidationError"
+    ) {
+      return NextResponse.json(
+        { error: "Invalid registration data" },
+        { status: 400 }
+      );
+    }
+
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }
