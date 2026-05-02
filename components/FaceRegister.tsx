@@ -4,6 +4,17 @@ import * as faceapi from "face-api.js";
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 
+const VIDEO_CONSTRAINTS = {
+  width: 360,
+  height: 270,
+  facingMode: "user",
+};
+
+const REGISTER_DETECTOR_OPTIONS = new faceapi.TinyFaceDetectorOptions({
+  inputSize: 224,
+  scoreThreshold: 0.2,
+});
+
 interface FaceRegisterProps {
   userData: {
     name: string;
@@ -25,9 +36,11 @@ export default function FaceRegister({ userData }: FaceRegisterProps) {
   useEffect(() => {
     const loadModels = async () => {
       try {
-        await faceapi.nets.tinyFaceDetector.loadFromUri("/models");
-        await faceapi.nets.faceLandmark68Net.loadFromUri("/models");
-        await faceapi.nets.faceRecognitionNet.loadFromUri("/models");
+        await Promise.all([
+          faceapi.nets.tinyFaceDetector.loadFromUri("/models"),
+          faceapi.nets.faceLandmark68Net.loadFromUri("/models"),
+          faceapi.nets.faceRecognitionNet.loadFromUri("/models"),
+        ]);
         setLoaded(true);
         setMessage("Ready to capture your face!");
       } catch (error) {
@@ -56,10 +69,10 @@ export default function FaceRegister({ userData }: FaceRegisterProps) {
       const captures: string[] = [];
       const faceDescriptors: Float32Array[] = [];
 
-      // Capture 3 images for better accuracy
-      for (let i = 0; i < 3; i++) {
-        setMessage(`Capturing image ${i + 1} of 3...`);
-        await new Promise(resolve => setTimeout(resolve, 1000));
+      // Capture 2 images for faster registration while keeping reliability.
+      for (let i = 0; i < 2; i++) {
+        setMessage(`Capturing image ${i + 1} of 2...`);
+        await new Promise((resolve) => setTimeout(resolve, 500));
 
         const imageSrc = webcamRef.current.getScreenshot();
         if (!imageSrc) {
@@ -68,10 +81,7 @@ export default function FaceRegister({ userData }: FaceRegisterProps) {
 
         const img = await faceapi.fetchImage(imageSrc);
         const detection = await faceapi
-          .detectSingleFace(img, new faceapi.TinyFaceDetectorOptions({
-            inputSize: 416,
-            scoreThreshold: 0.3
-          }))
+          .detectSingleFace(img, REGISTER_DETECTOR_OPTIONS)
           .withFaceLandmarks()
           .withFaceDescriptor();
 
@@ -142,6 +152,8 @@ export default function FaceRegister({ userData }: FaceRegisterProps) {
             <Webcam 
               ref={webcamRef} 
               screenshotFormat="image/jpeg"
+              screenshotQuality={0.75}
+              videoConstraints={VIDEO_CONSTRAINTS}
               width={400}
               height={300}
               className="rounded-xl shadow-2xl border-2 border-blue-500/30"
@@ -158,7 +170,7 @@ export default function FaceRegister({ userData }: FaceRegisterProps) {
           <div className="text-center">
             <p className="text-lg font-medium mb-2">{message}</p>
             <p className="text-slate-400 text-sm">
-              We'll capture 3 images to ensure accurate recognition
+              We'll capture 2 images for quick and accurate recognition
             </p>
           </div>
           

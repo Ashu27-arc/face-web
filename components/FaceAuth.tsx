@@ -4,6 +4,22 @@ import * as faceapi from "face-api.js";
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 
+const VIDEO_CONSTRAINTS = {
+  width: 360,
+  height: 270,
+  facingMode: "user",
+};
+
+const FAST_DETECTOR_OPTIONS = new faceapi.TinyFaceDetectorOptions({
+  inputSize: 224,
+  scoreThreshold: 0.2,
+});
+
+const FALLBACK_DETECTOR_OPTIONS = new faceapi.TinyFaceDetectorOptions({
+  inputSize: 320,
+  scoreThreshold: 0.15,
+});
+
 export default function FaceAuth() {
   const webcamRef = useRef<Webcam>(null);
   const router = useRouter();
@@ -13,9 +29,11 @@ export default function FaceAuth() {
   useEffect(() => {
     const loadModels = async () => {
       try {
-        await faceapi.nets.tinyFaceDetector.loadFromUri("/models");
-        await faceapi.nets.faceLandmark68Net.loadFromUri("/models");
-        await faceapi.nets.faceRecognitionNet.loadFromUri("/models");
+        await Promise.all([
+          faceapi.nets.tinyFaceDetector.loadFromUri("/models"),
+          faceapi.nets.faceLandmark68Net.loadFromUri("/models"),
+          faceapi.nets.faceRecognitionNet.loadFromUri("/models"),
+        ]);
         setLoaded(true);
         setMessage("Models loaded. Ready to verify!");
       } catch (error) {
@@ -40,8 +58,8 @@ export default function FaceAuth() {
     setMessage("Detecting face...");
 
     try {
-      // Try multiple times with different settings
-      for (let attempt = 0; attempt < 3; attempt++) {
+      // Fast first pass with two quick retries.
+      for (let attempt = 0; attempt < 2; attempt++) {
         const imageSrc = webcamRef.current.getScreenshot();
         if (!imageSrc) {
           setMessage("Failed to capture image");
@@ -49,16 +67,12 @@ export default function FaceAuth() {
         }
 
         const img = await faceapi.fetchImage(imageSrc);
-        
-        // Try with very low threshold first
-        const thresholds = [0.2, 0.15, 0.1];
-        const inputSizes = [416, 320, 224];
-        
+
         const detection = await faceapi
-          .detectSingleFace(img, new faceapi.TinyFaceDetectorOptions({
-            inputSize: inputSizes[attempt],
-            scoreThreshold: thresholds[attempt]
-          }))
+          .detectSingleFace(
+            img,
+            attempt === 0 ? FAST_DETECTOR_OPTIONS : FALLBACK_DETECTOR_OPTIONS
+          )
           .withFaceLandmarks()
           .withFaceDescriptor();
 
@@ -95,58 +109,11 @@ export default function FaceAuth() {
             return;
           }
         }
-        
-        setMessage(`Attempt ${attempt + 1}/3... Adjusting settings...`);
-        await new Promise(resolve => setTimeout(resolve, 500));
+
+        setMessage(`Attempt ${attempt + 1}/2... Adjusting...`);
+        await new Promise((resolve) => setTimeout(resolve, 250));
       }
-      
-      // If all attempts fail, try detecting all faces
-      const imageSrc = webcamRef.current.getScreenshot();
-      if (imageSrc) {
-        const img = await faceapi.fetchImage(imageSrc);
-        const detections = await faceapi
-          .detectAllFaces(img, new faceapi.TinyFaceDetectorOptions({
-            inputSize: 224,
-            scoreThreshold: 0.1
-          }))
-          .withFaceLandmarks()
-          .withFaceDescriptors();
 
-        if (detections && detections.length > 0) {
-          setMessage("Face detected! Authenticating...");
-          
-          // Try authentication with first detected face
-          const authResponse = await fetch("/api/authenticate", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              faceDescriptor: Array.from(detections[0].descriptor),
-            }),
-          });
-
-          const authResult = await authResponse.json();
-
-          if (authResponse.ok && authResult.success) {
-            setMessage(`Welcome back, ${authResult.user.name}!`);
-            localStorage.setItem("faceAuth", "true");
-            localStorage.setItem("userId", authResult.user.id);
-            localStorage.setItem("userName", authResult.user.name);
-            
-            // Trigger custom event for navbar update
-            window.dispatchEvent(new Event("authStateChanged"));
-            
-            setTimeout(() => router.push("/"), 1000);
-            return;
-          } else {
-            setMessage("Face not recognized. Please try again or register.");
-            alert("Authentication failed: " + (authResult.error || "Face not recognized"));
-            return;
-          }
-        }
-      }
-      
       setMessage("No face detected. Please try again.");
       alert("Face not detected after multiple attempts. Please ensure:\n- Your face is clearly visible\n- Good lighting\n- Camera has permission\n- Face the camera directly");
     } catch (error) {
@@ -162,6 +129,8 @@ export default function FaceAuth() {
         <Webcam 
           ref={webcamRef} 
           screenshotFormat="image/jpeg"
+          screenshotQuality={0.75}
+          videoConstraints={VIDEO_CONSTRAINTS}
           width={400}
           height={300}
           className="rounded-xl shadow-2xl border-2 border-blue-500/30"
