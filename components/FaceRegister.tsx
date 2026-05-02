@@ -98,8 +98,7 @@ export default function FaceRegister({ userData }: FaceRegisterProps) {
       // Save face data to backend
       const registrationData = {
         userData,
-        faceDescriptors: faceDescriptors.map(desc => Array.from(desc)),
-        capturedImages: captures
+        faceDescriptors: faceDescriptors.map((desc) => Array.from(desc)),
       };
 
       setMessage("Saving to server...");

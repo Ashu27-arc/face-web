@@ -10,7 +10,7 @@ type RegisterBody = {
     company?: string;
   };
   faceDescriptors?: number[][];
-  capturedImages?: string[];
+  capturedImages?: string[]; // optional for backward compatibility
 };
 
 export async function POST(request: NextRequest) {
@@ -19,7 +19,7 @@ export async function POST(request: NextRequest) {
     const { userData, faceDescriptors, capturedImages } = body;
 
     // Validate required fields
-    if (!userData || !faceDescriptors || !capturedImages) {
+    if (!userData || !faceDescriptors) {
       return NextResponse.json(
         { error: "Missing required fields" },
         { status: 400 }
@@ -37,13 +37,6 @@ export async function POST(request: NextRequest) {
     if (!Array.isArray(faceDescriptors) || faceDescriptors.length === 0) {
       return NextResponse.json(
         { error: "At least one face descriptor is required" },
-        { status: 400 }
-      );
-    }
-
-    if (!Array.isArray(capturedImages) || capturedImages.length === 0) {
-      return NextResponse.json(
-        { error: "At least one captured image is required" },
         { status: 400 }
       );
     }
@@ -69,7 +62,11 @@ export async function POST(request: NextRequest) {
         name: userData.name.trim(),
       },
       faceDescriptors,
-      capturedImages,
+      // Keep request payload light for serverless deployments (e.g. Vercel).
+      capturedImages:
+        Array.isArray(capturedImages) && capturedImages.length > 0
+          ? capturedImages.slice(0, 1)
+          : [],
     });
 
     return NextResponse.json({
